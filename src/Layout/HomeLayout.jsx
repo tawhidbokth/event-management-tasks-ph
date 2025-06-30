@@ -6,10 +6,10 @@ import Footer from '../Components/Footer/Footer';
 const HomeLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <nav>
+      <nav className="">
         <Navbar></Navbar>
       </nav>
-      <main className="flex-grow py-20">
+      <main className="flex-grow py-6">
         <Outlet />
       </main>
 

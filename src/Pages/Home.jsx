@@ -1,12 +1,20 @@
 import React from 'react';
+import Banner from '../Components/Banner/Banner';
+import Features from '../Components/Features/Features';
+import HowItWorks from '../Components/Howtoworks/HowToWorks';
 
 const Home = () => {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline text-center mt-10">
-        Welcome to the Home Page!
-      </h1>
-      <p className="text-center mt-5">This is a simple home page component.</p>
+      <header>
+        <Banner />
+      </header>
+      <main>
+        <Features />
+        <section>
+          <HowItWorks />
+        </section>
+      </main>
     </div>
   );
 };
