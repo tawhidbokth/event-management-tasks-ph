@@ -1,8 +1,6 @@
-// components/RegisterPage.jsx
+import React, { useState } from 'react';
 
-import { useState } from 'react';
-
-const RegisterPage = () => {
+function Register() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,78 +16,82 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleRegister = e => {
     e.preventDefault();
-    // Dummy submission - later integrate API call
-    console.log('Registration Data:', formData);
-    alert('✅ Registration successful (dummy)');
+
+    fetch('http://localhost:5000/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message && data.message.includes('✅')) {
+          alert(data.message);
+          setFormData({ name: '', email: '', password: '', photoURL: '' });
+        } else {
+          alert('❌ ' + (data.message || 'Registration failed'));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('❌ Server error, please try again later.');
+      });
   };
 
   return (
-    <div className="min-h-screen flex items-center bg-slate-200 justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-indigo-700">
-          Create Your Account
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleRegister}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md space-y-4"
+      >
+        <h2 className="text-2xl font-bold text-center text-gray-700">
+          Register
         </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            minLength={6}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <input
-            type="url"
-            name="photoURL"
-            placeholder="Photo URL (optional)"
-            value={formData.photoURL}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <button
-            type="submit"
-            className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            Register
-          </button>
-        </form>
-
-        <p className="mt-6 text-center text-gray-500 text-sm">
-          Already have an account?{' '}
-          <a href="/login" className="text-indigo-600 hover:underline">
-            Login here
-          </a>
-        </p>
-      </div>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="text"
+          name="photoURL"
+          placeholder="Photo URL (optional)"
+          value={formData.photoURL}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <button
+          type="submit"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition"
+        >
+          Register
+        </button>
+      </form>
     </div>
   );
-};
+}
 
-export default RegisterPage;
+export default Register;

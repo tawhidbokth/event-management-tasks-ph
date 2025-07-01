@@ -1,5 +1,3 @@
-// components/LoginPage.jsx
-
 import { useState } from 'react';
 
 const LoginPage = () => {
@@ -16,11 +14,30 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('Login Data:', formData);
-    alert('✅ Login successful (dummy)');
-    // Later: API call for authentication
+
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message || '✅ Login successful');
+        localStorage.setItem('token', data.token); // Save token
+        // Optional: redirect to dashboard
+        // navigate('/dashboard');
+      } else {
+        alert('❌ ' + (data.message || 'Login failed'));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('❌ Server error. Try again later.');
+    }
   };
 
   return (
